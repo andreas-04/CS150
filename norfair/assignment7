@@ -1,0 +1,42 @@
+ ;Write a subroutine in CS150 AVR assembly language
+ ;named ReverseBits. Your ReverseBits subroutine will
+ ;take an unsigned 8-bit value in R16 and reverse the
+ ;order of its bits, storing the result in R1. You may
+ ;only use instructions that are contained within the CS150
+ ;AVR instruction subset. Write a test code that calls this
+ ;subroutine with different values in R16.
+
+ldi r19, 0xff
+
+jmp entry
+
+
+entry:
+
+ldi r16, 0x81; load val into r16 for later bit flippage
+
+
+flipBits:
+    mov r1, r16     ; Copy the input value to R1
+    ldi r18, 0x08   ; Initialize loop counter to 8
+
+reverseLoop:
+    lsr r1          ; Shift the input value one position to the right
+    brbc 0, continue   ; If the carry flag is clear, continue with the loop
+
+setBit:
+    ori r17, 0x80    ; Set the most significant bit of R0
+    rjmp continue   ; Continue with the loop
+
+continue:
+    lsr r17       ; Shift the reversed value one position to the left
+    adc
+    add r18, r19
+    cpi r18, 0x00         ; Decrement the loop counter
+    brbc 1, reverseLoop ; If the loop counter is not zero, repeat
+
+    jmp sink
+sink:
+     jmp sink            ; Return from subroutine
+
+

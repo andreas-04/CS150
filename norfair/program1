@@ -1,0 +1,114 @@
+;subroutine takes 1 argument and compares the upper and lower nibble
+;ret $FF if greater
+     ldi r16, $cd
+     push r16
+     rcall upperNibbleGreaterThanLower
+     pop r0
+     nop
+upperNibbleGreaterThanLower:
+    ;pop return address
+    pop r30
+    pop r31
+
+    pop r18; argument
+    mov r17, r18
+
+    lsr r17
+    lsr r17
+    lsr r17
+    lsr r17
+
+    andi r18, $0f
+
+    cp r18,r17
+
+    brbs 0, upperNibGreater
+    ldi r18, $00
+    rjmp finish
+
+upperNibGreater:
+    ldi r18, $ff
+
+finish:
+    push r18
+    push r31
+    push r30
+    ret
+
+
+;  Elixer (1-5 mag) 4 bits [7:4]
+;      presence [7:7]
+;      magnitude [6:4]
+;  Red Crystal      1 bit  [2:2]
+;  Blue Crystal     2 bit  [1:1]
+
+; returns $ff iff byte on stack indicates that the player has in inventory
+InvHasBlueCrystal:
+
+; first must pop return address off the stack, high and lo byte of sp
+
+  pop r2
+  pop r3
+
+;pop our arg off the stack
+  pop r8;
+  ldi r17, 2
+  and r17, r8
+  brbs 1, noBlueCrys
+  ldi r18, 0xff
+  jmp finished
+
+noBlueCrys:
+  eor r18, r18
+
+finished:
+  push r3
+  push r2
+  ret
+
+invClearBlueCrys:
+  pop r2
+  pop r3
+
+  pop r16   ;pop argument, aka inventory byte
+                                                                   \
+  andi r16, 0xFD   ;clear the first bit: 1111 1101
+                   ;                 and xxxx xxxx
+                   ;                   = xxxx xx0x
+  push r16
+
+  push r3
+  push r2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+ldi r16, $cd
+ldi r17, $dc
+mov r5, r16
+mov r7, r17
+
+call XorR5andR7
+
+XorR5andR7:
+    mov r8, r5
+    mov r9, r7
+
+    and r5, r7
+    com r5
+
+    or r8, r9
+
+
+    and r5,r8
+    mov r3, r5
+    ret
+
+

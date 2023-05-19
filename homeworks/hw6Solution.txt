@@ -1,0 +1,17 @@
+main:
+   ldi r16, $0f ; value of r16
+   ldi r18, $ff ; a negative one for decrementing the
+                ; counter
+
+NumOnesInR16:
+    cpi r16, $00 ; check if r16 is empty, this can happen
+    brbs 1, sink ; if r16 =0 initially or if we have
+                 ; checked all bits
+    ldi r17, $07 ; counter
+    lsr r16
+    adc r1, r2   ; add the carry bit to r1, r2 is empty
+    add r17, r18 ; decrement the counter
+    rjmp NumOnesInR16
+
+sink:
+     jmp sink
